@@ -68,7 +68,7 @@ view model =
     let
         logRow entry = Html.tr [Html.Attributes.class (toString entry.severity |> String.toLower)] [
             (Html.td [] [text entry.timeString]),
-            (Html.td [] [text (String.fromInt entry.time)]),
+            (Html.td [] [text (String.fromInt entry.cumulativeTime)]),
             (Html.td [] [text (String.fromInt entry.deltaTime)]),
             (Html.td [] [text (toString entry.severity)]),
             (Html.td [] [text entry.text]) ]
