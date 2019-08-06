@@ -1,12 +1,18 @@
 # Slog Logs viewer
 
 Single-page webapp for user-friendly viewing and filtering logs 
-in the [slog](https://crates.io/crates/slog) format.
+in the [slog](https://crates.io/crates/slog) format. 
+You can just open the page locally and you are ready to go.
+
 Written in the [Elm programming language](https://elm-lang.org/).
 
-The slog log lines look like this:
+Currently it expects the log lines to look like this:
 
 `Aug 04 12:58:20.509 INFO Connecting to simulated camera device, device: CAM01, DeviceManager: CAM01, module: KmsCompoundDevices`
+
+that is `MMM DD HH:MM:SS.MMM Severity Message`
+
+Multiline log messages are supported.
 
 Could probably be easily modified to support other formats.
 
