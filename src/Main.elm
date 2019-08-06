@@ -3,6 +3,7 @@ import File exposing (File)
 import File.Select as Select
 import Html exposing (Html, button, p, text)
 import Html.Attributes
+import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Task
 import Log
@@ -24,6 +25,7 @@ main =
 
 type alias Model = {
     log: Log.Log,
+    controlPanelMinimized: Bool,
     fileName: String,
     filters: Filter.Model
     }
@@ -32,6 +34,7 @@ init : () -> (Model, Cmd Msg)
 init _ = (
         {
             log = [],
+            controlPanelMinimized = False,
             fileName = "",
             filters = Filter.emptyModel
         },
@@ -44,6 +47,8 @@ type Msg
   = LogRequested
   | LogSelected File
   | LogLoaded {fileName: String, content: String}
+  | MinimizeControlPanel
+  | MaximizeControlPanel
   | FilterMsg Filter.Msg
 
 
@@ -62,6 +67,8 @@ update msg model =
         { model | log = Log.stringToLog info.content, fileName = info.fileName },
         Cmd.none
       )
+    MinimizeControlPanel -> ({model | controlPanelMinimized = True}, Cmd.none)
+    MaximizeControlPanel -> ({model | controlPanelMinimized = False}, Cmd.none)
     FilterMsg filterMsg ->
         let
             (newModel, cmd) = Filter.update filterMsg model.filters
@@ -77,7 +84,7 @@ view model =
         td s = Html.td [] [text s]
         logTableHeader = Html.thead [] [Html.tr [] [td "Time", td "Cumul.", td "Delta", td "Level", td "Message"]]
         logTableRow entry =
-            Html.tr [Html.Attributes.class (Log.toString entry.severity |> String.toLower)] [
+            Html.tr [class (Log.toString entry.severity |> String.toLower)] [
                 td entry.timeString,
                 td (String.fromInt entry.cumulativeTime),
                 td (String.fromInt entry.deltaTime),
@@ -86,11 +93,20 @@ view model =
             ]
         logTableBody = Html.tbody [] (List.map logTableRow (Filter.filterLog model.filters model.log))
 
+        controlPanel = if model.controlPanelMinimized
+            then
+                button [ class "controlPanelButton", onClick MaximizeControlPanel ] [ text "~" ]
+            else
+                Html.div [class "controlPanel"] [
+                    button [ onClick MinimizeControlPanel ] [ text "~" ],
+                    text " ",
+                    button [ onClick LogRequested ] [ text "Load Log" ], text model.fileName,
+                    Html.map FilterMsg (Filter.view model.filters)
+                ]
+
     in
         p [] [
-            button [ onClick LogRequested ] [ text "Load Log" ],
-            Html.h1 [] [text model.fileName],
-            Html.map FilterMsg (Filter.view model.filters),
+            controlPanel,
             Html.table [] [logTableHeader, logTableBody]
         ]
 

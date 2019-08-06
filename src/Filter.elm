@@ -2,7 +2,7 @@ module Filter exposing (Filters, Filter, SpecificFilter, FilterContext, filterLo
 
 import Log exposing (Severity(..), Log, LogEntry)
 import Html exposing (Html, button, p, text)
-import Html.Attributes exposing (name, value)
+import Html.Attributes exposing (class, name, value)
 import Html.Events exposing (onClick, onInput)
 
 type SpecificFilter = AcceptMatching String
@@ -88,14 +88,11 @@ update msg model =
 view : Model -> Html Msg
 view model =
     let
-        td s = Html.td [] [text s]
-        tableHeader = Html.thead [] [Html.tr [] [td "", td "Filter", td "Applicable in context"]]
-
         textFilterRow id filterText contextText =
             Html.tr [] [
-                (Html.td [] [button [ onClick (Delete id) ] [ text "X" ]]),
-                (Html.td [] [Html.input [ value filterText, name "Filter", onInput (UpdateFilterText id) ] []]),
-                (Html.td [] [Html.input [ value contextText, name "Context", onInput (UpdateFilterContextText id) ] []])
+                (Html.td [] [text "Filter ", Html.input [ value filterText, name "Filter", onInput (UpdateFilterText id) ] []]),
+                (Html.td [] [text "Context ", Html.input [ value contextText, name "Context", onInput (UpdateFilterContextText id) ] []]),
+                (Html.td [] [button [ class "button-outline", onClick (Delete id) ] [ text "X" ]])
             ]
 
         filterRow filter =
@@ -105,6 +102,6 @@ view model =
         tableBody = Html.tbody [] (List.map filterRow model.filters)
     in
         p [] [
-                Html.table [] [tableHeader, tableBody],
+                Html.table [] [tableBody],
                 button [ onClick AddAcceptMatching ] [ text "Add Accept" ]
             ]

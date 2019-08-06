@@ -557,3 +557,17 @@ tr.warn {
 tr.error {
   background-color: #fdd;
 }
+
+div.controlPanel {
+  overflow: hidden;
+  background-color: #fff;
+  border: 1px solid black;
+  position: fixed;
+  top: 0;
+}
+
+button.controlPanelButton {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+}
