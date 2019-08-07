@@ -20,7 +20,6 @@ Could probably be easily modified to support other formats.
 
  - **Parse arbitrary logs with customizable format**
  - User-definable severity levels
- - Highlight matching filters
  - Improve performance for big logs
  - Remember filter settings
 

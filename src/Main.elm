@@ -1,12 +1,13 @@
 import Browser
-import File exposing (File)
-import File.Select as Select
+import File
+import File.Select
 import Html exposing (Html, button, div, text)
 import Html.Attributes
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Task
 import Log
+import Log exposing (Severity(..))
 import Filter
 import Keyboard
 import Keyboard exposing (Key(..))
@@ -31,11 +32,17 @@ type alias Model = {
     filters: Filter.Model
     }
 
+helpText = """
+Welcome to the Log viewer.
+
+Use the control panel (F2) to open new log file,
+"""
+
 init : () -> (Model, Cmd Msg)
 init _ = (
         {
-            log = [],
-            controlPanelMinimized = False,
+            log = [{ dateString = "now", timeString = "now", time = 0, cumulativeTime = 0, deltaTime = 0, severity = Info, text = helpText }],
+            controlPanelMinimized = True,
             fileName = "",
             filters = Filter.emptyModel
         },
@@ -46,7 +53,7 @@ init _ = (
 
 type Msg
   = LogRequested
-  | LogSelected File
+  | LogSelected File.File
   | LogLoaded {fileName: String, content: String}
   | KeyDown Keyboard.RawKey
   | MinimizeControlPanel
@@ -59,7 +66,7 @@ update msg model =
   case msg of
     LogRequested -> (
             model,
-            Select.file ["text"] LogSelected
+            File.Select.file ["text"] LogSelected
         )
     KeyDown rawKey ->
         case Keyboard.anyKeyOriginal rawKey of
@@ -67,7 +74,7 @@ update msg model =
                 if key == F2 then
                     ({model | controlPanelMinimized = not model.controlPanelMinimized}, Cmd.none)
                 else if key == F4 then
-                    (model, Select.file ["text"] LogSelected)
+                    (model, File.Select.file ["text"] LogSelected)
                 else
                     (model, Cmd.none)
             Nothing -> (model, Cmd.none)
@@ -90,9 +97,44 @@ update msg model =
 
 -- VIEW
 
+type HighlightStringNode =
+    Text String |
+    Highlight {text: String, highlight: Int}
+
+type alias StringWithHighlights = List HighlightStringNode
+
+addHighlight (needle, highlight) stringWithHighlights =
+    let
+        highlightString string =
+            String.split needle string |> List.map Text |> List.intersperse (Highlight {text = needle, highlight = highlight})
+        highlightNode node =
+            case node of
+                Text string -> highlightString string
+                Highlight _ -> [node]
+    in
+        List.concatMap highlightNode stringWithHighlights
+
+stringWithHighlightsToHtml stringWithHighlights =
+    let
+        nodeToHtml node =
+            case node of
+                Text string -> String.split "\n" string |> List.map text |> List.intersperse (Html.br [] [])
+                Highlight {text, highlight} -> [Html.span [class ("highlight-" ++ String.fromInt highlight)] [Html.text text]]
+    in
+        List.concatMap nodeToHtml stringWithHighlights
+
 view : Model -> Html Msg
 view model =
     let
+        getHighlightString filter =
+            case filter.specific of
+                Filter.AcceptMatching string -> [(string, 1 + modBy 6 filter.id)]
+                Filter.RejectMatching _ -> []
+                Filter.LevelFilter _ -> []
+
+        highlightSpecs = List.concatMap getHighlightString model.filters.filters
+        highlightedText entry = List.foldl addHighlight [Text entry.text] highlightSpecs
+
         td s = Html.td [] [text s]
         logTableHeader = Html.thead [] [Html.tr [] [td "Time", td "Cumul.", td "Delta", td "Level", td "Message"]]
         logTableRow entry =
@@ -101,7 +143,7 @@ view model =
                 td (String.fromInt entry.cumulativeTime),
                 td (String.fromInt entry.deltaTime),
                 td (Log.toString entry.severity),
-                td entry.text
+                Html.td [] (stringWithHighlightsToHtml (highlightedText entry))
             ]
         logTableBody = Html.tbody [] (List.map logTableRow (Filter.filterLog model.filters model.log))
 

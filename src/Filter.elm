@@ -1,8 +1,8 @@
-module Filter exposing (Filters, Filter, SpecificFilter, FilterContext, filterLog, Model, emptyModel, Msg, update, view )
+module Filter exposing (Filters, Filter, SpecificFilter(..), FilterContext, filterLog, Model, emptyModel, Msg, update, view )
 
-import Log exposing (Severity(..), toInt, Log, LogEntry)
+import Log exposing (Severity, toInt, Log, LogEntry)
 import Html exposing (div, Html, button, text)
-import Html.Attributes exposing (class, value)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onClick, onInput)
 
 type SpecificFilter =
@@ -84,7 +84,7 @@ update msg model =
         case msg of
             AddAcceptMatching -> addFilter (AcceptMatching "")
             AddRejectMatching -> addFilter (RejectMatching "")
-            AddLevelFilter ->  addFilter (LevelFilter Debug)
+            AddLevelFilter ->  addFilter (LevelFilter Log.Debug)
             UpdateFilterContextText id newContext ->
                 doUpdateFilter id (\filter -> {filter | context = newContext})
             UpdateSeverity id newSeverity ->
@@ -129,12 +129,12 @@ view model =
                 spacer,
                 text "Context ",
                 spacer,
-                Html.input [ value filter.context, onInput (UpdateFilterContextText filter.id) ] [],
+                Html.input [ Html.Attributes.value filter.context, onInput (UpdateFilterContextText filter.id) ] [],
                 spacer
             ]
 
         textFilterRow filter name filterText =
-            row filter name (Html.input [ value filterText, onInput (UpdateFilterText filter.id) ] [])
+            row filter name (Html.input [ Html.Attributes.value filterText, onInput (UpdateFilterText filter.id) ] [])
 
         selectSeverityButton id selectedSeverity severity =
             button [ toggleButtonClass (selectedSeverity == severity), onClick (UpdateSeverity id severity) ] [ text (Log.toString severity) ]

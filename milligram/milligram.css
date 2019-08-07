@@ -558,9 +558,33 @@ tr.error {
   background-color: #fdd;
 }
 
+span.highlight-1 {
+  background-color: #fcc;
+}
+
+span.highlight-2 {
+  background-color: #cfc;
+}
+
+span.highlight-3 {
+  background-color: #ccf;
+}
+
+span.highlight-4 {
+  background-color: #cff;
+}
+
+span.highlight-5 {
+  background-color: #fcf;
+}
+
+span.highlight-6 {
+  background-color: #ffc;
+}
+
 div.controlPanel {
   overflow: hidden;
-  background-color: #fff;
+  background-color: #f4f5f6;
   border: 1px solid black;
   position: fixed;
   top: 0;
