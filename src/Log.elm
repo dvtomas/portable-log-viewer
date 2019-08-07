@@ -1,14 +1,24 @@
-module Log exposing (Severity(..), toString, LogEntry, Log, stringToLog)
+module Log exposing (Severity(..), toString, severityDef, toInt, LogEntry, Log, stringToLog)
 
 type alias Millis = Int
 
 type Severity = Trace | Debug | Info | Warn | Error
-toString severity = case severity of
-    Trace -> "Trace"
-    Debug -> "Debug"
-    Info -> "Info"
-    Warn -> "Warn"
-    Error -> "Error"
+
+severityTo severity mapF default =
+    List.filterMap (\definition -> if definition.severity == severity then Just (mapF definition) else Nothing) severityDef
+        |> List.head
+        |> Maybe.withDefault default
+
+toString severity = severityTo severity .string "???"
+toInt severity = severityTo severity .level -1
+
+severityDef = [
+        {severity = Trace, string = "Trace", level = 0},
+        {severity = Debug, string = "Debug", level = 1},
+        {severity = Info, string = "Info", level = 2},
+        {severity = Warn, string = "Warn", level = 3},
+        {severity = Error, string = "Error", level = 4}
+    ]
 
 type alias LogEntry =
     { dateString: String

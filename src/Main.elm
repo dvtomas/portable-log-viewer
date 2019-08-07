@@ -22,7 +22,6 @@ main =
     , subscriptions = subscriptions
     }
 
-
 -- MODEL
 
 type alias Model = {
@@ -65,9 +64,9 @@ update msg model =
     KeyDown rawKey ->
         case Keyboard.anyKeyOriginal rawKey of
             Just key ->
-                if key == Character "~" then
+                if key == F2 then
                     ({model | controlPanelMinimized = not model.controlPanelMinimized}, Cmd.none)
-                else if key == F2 then
+                else if key == F4 then
                     (model, Select.file ["text"] LogSelected)
                 else
                     (model, Cmd.none)
@@ -108,12 +107,12 @@ view model =
 
         controlPanel = if model.controlPanelMinimized
             then
-                button [ class "controlPanelButton", onClick MaximizeControlPanel ] [ text "~" ]
+                button [ class "controlPanelButton", onClick MaximizeControlPanel ] [ text "▼F2" ]
             else
                 Html.div [class "controlPanel"] [
-                    button [ onClick MinimizeControlPanel ] [ text "~" ],
+                    button [ onClick MinimizeControlPanel ] [ text "▲F2" ],
                     text " ",
-                    button [ onClick LogRequested ] [ text "Load Log (F2)" ], text " ", text model.fileName,
+                    button [ onClick LogRequested ] [ text "Load Log (F4)" ], text " ", text model.fileName,
                     Html.map FilterMsg (Filter.view model.filters)
                 ]
     in

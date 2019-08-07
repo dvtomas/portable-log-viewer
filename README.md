@@ -1,8 +1,8 @@
 # Slog Logs viewer
 
-Single-page webapp for user-friendly viewing and filtering logs 
+Single-page JavaScript webapp for user-friendly viewing and filtering logs 
 in the [slog](https://crates.io/crates/slog) format. 
-You can just open the page locally and you are ready to go.
+Just open the page in your browser and you are ready to go.
 
 Written in the [Elm programming language](https://elm-lang.org/).
 
@@ -16,6 +16,14 @@ Multiline log messages are supported.
 
 Could probably be easily modified to support other formats.
 
+## TODO
+
+ - **Parse arbitrary logs with customizable format**
+ - User-definable severity levels
+ - Highlight matching filters
+ - Improve performance for big logs
+ - Remember filter settings
+
 ## Known bugs
 
- - Only parses time component for computing time offsets and deltas. Those wIll go negative on midnight
+ - Only parses time component for computing time offsets and deltas. Those wIll wrap negative on midnight
