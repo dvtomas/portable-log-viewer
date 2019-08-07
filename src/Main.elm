@@ -8,6 +8,8 @@ import Html.Events exposing (onClick)
 import Task
 import Log
 import Filter
+import Keyboard
+import Keyboard exposing (Key(..))
 
 -- MAIN
 
@@ -47,6 +49,7 @@ type Msg
   = LogRequested
   | LogSelected File
   | LogLoaded {fileName: String, content: String}
+  | KeyDown Keyboard.RawKey
   | MinimizeControlPanel
   | MaximizeControlPanel
   | FilterMsg Filter.Msg
@@ -59,6 +62,16 @@ update msg model =
             model,
             Select.file ["text"] LogSelected
         )
+    KeyDown rawKey ->
+        case Keyboard.anyKeyOriginal rawKey of
+            Just key ->
+                if key == Character "~" then
+                    ({model | controlPanelMinimized = not model.controlPanelMinimized}, Cmd.none)
+                else if key == F2 then
+                    (model, Select.file ["text"] LogSelected)
+                else
+                    (model, Cmd.none)
+            Nothing -> (model, Cmd.none)
     LogSelected file -> (
             model,
             Task.perform (\content -> LogLoaded {fileName = File.name file, content = content}) (File.toString file)
@@ -100,10 +113,9 @@ view model =
                 Html.div [class "controlPanel"] [
                     button [ onClick MinimizeControlPanel ] [ text "~" ],
                     text " ",
-                    button [ onClick LogRequested ] [ text "Load Log" ], text " ", text model.fileName,
+                    button [ onClick LogRequested ] [ text "Load Log (F2)" ], text " ", text model.fileName,
                     Html.map FilterMsg (Filter.view model.filters)
                 ]
-
     in
         div [] [
             controlPanel,
@@ -114,4 +126,6 @@ view model =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-  Sub.none
+    Sub.batch [
+        Keyboard.downs KeyDown
+    ]
