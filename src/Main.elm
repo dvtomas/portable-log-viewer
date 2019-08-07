@@ -1,7 +1,7 @@
 import Browser
 import File exposing (File)
 import File.Select as Select
-import Html exposing (Html, button, p, text)
+import Html exposing (Html, button, div, text)
 import Html.Attributes
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
@@ -100,12 +100,12 @@ view model =
                 Html.div [class "controlPanel"] [
                     button [ onClick MinimizeControlPanel ] [ text "~" ],
                     text " ",
-                    button [ onClick LogRequested ] [ text "Load Log" ], text model.fileName,
+                    button [ onClick LogRequested ] [ text "Load Log" ], text " ", text model.fileName,
                     Html.map FilterMsg (Filter.view model.filters)
                 ]
 
     in
-        p [] [
+        div [] [
             controlPanel,
             Html.table [] [logTableHeader, logTableBody]
         ]
