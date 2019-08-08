@@ -4534,7 +4534,7 @@ var author$project$Log$Trace = {$: 'Trace'};
 var author$project$Log$Warn = {$: 'Warn'};
 var author$project$Main$helpTexts = _List_fromArray(
 	[
-		_Utils_Tuple2(author$project$Log$Warn, 'INTRO Welcome to the Portable Log viewer, TODO homepage'),
+		_Utils_Tuple2(author$project$Log$Warn, 'INTRO Welcome to the Portable Log viewer, https://github.com/dvtomas/portable-log-viewer'),
 		_Utils_Tuple2(author$project$Log$Info, 'INTRO This is a simple application to parse and browse modest-sized text logs. You can filter log messages and highlight particular substrings.'),
 		_Utils_Tuple2(author$project$Log$Info, 'INTRO Right now the application can only parse logs in a very specific format produced by https://docs.rs/slog-term/2.4.1/slog_term/. Log entries look like this:'),
 		_Utils_Tuple2(author$project$Log$Debug, 'Apr 17 12:19:24.597 DEBG Listening, port: 12345, module: ProtoServer'),
@@ -4546,6 +4546,7 @@ var author$project$Main$helpTexts = _List_fromArray(
 		_Utils_Tuple2(author$project$Log$Info, 'FEATURES Highlight searched terms with different colors '),
 		_Utils_Tuple2(author$project$Log$Warn, 'USAGE Let\'s take a closer look on how to use the Portable Log Viewer'),
 		_Utils_Tuple2(author$project$Log$Debug, 'USAGE Use the control panel (F2) to load your own log file (try a real world example here: TODO) and to set-up filters.'),
+		_Utils_Tuple2(author$project$Log$Trace, 'Example real-world logs:\nhttps://dvtomas.github.io/portable-log-viewer/example-log-1.log\nhttps://dvtomas.github.io/portable-log-viewer/example-log-2.log'),
 		_Utils_Tuple2(author$project$Log$Debug, 'USAGE FILTERS There are currently three filters implemented: '),
 		_Utils_Tuple2(author$project$Log$Debug, 'USAGE FILTERS  - Accept Matching: a filter that only accepts entries containing a substring and rejects everything else'),
 		_Utils_Tuple2(author$project$Log$Debug, 'USAGE FILTERS  - Reject Matching: a filter that only accepts entries NOT containing a substring'),

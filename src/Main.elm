@@ -33,7 +33,7 @@ type alias Model = {
     }
 
 helpTexts = [
-    (Warn, "INTRO Welcome to the Portable Log viewer, TODO homepage"),
+    (Warn, "INTRO Welcome to the Portable Log viewer, https://github.com/dvtomas/portable-log-viewer"),
     (Info, "INTRO This is a simple application to parse and browse modest-sized text logs. You can filter log messages and highlight particular substrings."),
     (Info, "INTRO Right now the application can only parse logs in a very specific format produced by https://docs.rs/slog-term/2.4.1/slog_term/. Log entries look like this:"),
     (Debug, "Apr 17 12:19:24.597 DEBG Listening, port: 12345, module: ProtoServer"),
@@ -45,6 +45,7 @@ helpTexts = [
     (Info, "FEATURES Highlight searched terms with different colors "),
     (Warn, "USAGE Let's take a closer look on how to use the Portable Log Viewer"),
     (Debug, "USAGE Use the control panel (F2) to load your own log file (try a real world example here: TODO) and to set-up filters."),
+    (Trace, "Example real-world logs:\nhttps://dvtomas.github.io/portable-log-viewer/example-log-1.log\nhttps://dvtomas.github.io/portable-log-viewer/example-log-2.log"),
     (Debug, "USAGE FILTERS There are currently three filters implemented: "),
     (Debug, "USAGE FILTERS  - Accept Matching: a filter that only accepts entries containing a substring and rejects everything else"),
     (Debug, "USAGE FILTERS  - Reject Matching: a filter that only accepts entries NOT containing a substring"),

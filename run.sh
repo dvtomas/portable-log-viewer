@@ -1,3 +1,3 @@
 #!/bin/sh
 
-./make.sh && cd target && sensible-browser ./index.html
+./make.sh && cd docs && sensible-browser ./index.html
