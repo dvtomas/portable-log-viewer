@@ -88,7 +88,7 @@ stringToLog s  =
             case parseLine line of
                 Just entry -> entry :: logEntries
                 Nothing -> case logEntries of
-                    head :: tail -> {head | text = head.text ++ line} :: tail
+                    head :: tail -> {head | text = head.text ++ "\n" ++ line} :: tail
                     [] -> logEntries {-First line is not a valid log line, discard it-}
 
 
